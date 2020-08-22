@@ -1,47 +1,23 @@
-#Folder Structure:
-	scRNASeq/
-		data/
-		kallisto/
-		fastqc-results/
-
-#Used a conda environment
-#Add these channels
-#conda config --add channels defaults
-#conda config --add channels bioconda
-#conda config --add channels conda-forge
-#INSTALL packages
-#conda install numpy
-#conda install scipy
-#conda install pandas
-#conda install matplotlib
-#conda install scikit-learn
-#conda install scanpy
-#pip install leidenalg
-#pip install kb-python
-
-#Downloaded the data from https://www.ebi.ac.uk/arrayexpress/experiments/E-MTAB-6149/samples/?s_page=1&s_pagesize=100)
-#data folder has these files -> 2 Samples from Patient 3 (3c, 3d)
-
 QUALITY CHECK (using fastqc):
 
 	fastqc ../data/* -o ../fastqc_result/ -t 20
 
 PSEUDO ALIGNMENT AND COUNTING (using kallisto and bustools workflow):
 
-	#Download a kallisto index for human
+	#Downloaded a kallisto index for human
+
 	kb ref -d human -i ../kallisto/index.idx -g ../kallisto/t2g.txt -f1 transcriptome.fasta
 
-	#Create directories in (BT1292, BT1293) kallisto folder
+	#Created directories in (BT1292, BT1293) kallisto folder
 
 	#Quantification and generating count matrix for two samples
+
 	kb count  --h5ad -i ../kallisto/index.idx -g ../kallisto/t2g.txt -t 20 -m 64G -x 10xv2 -o ../kallisto/BT1292/ \
 	--filter bustools --verbose \
 	../data/BT1292_R1.fastq.gz \
 	../data/BT1292_R2.fastq.gz
 
-	kb count  --h5ad -i ../kallisto/index.idx -g ../kallisto/t2g.txt --overwrite -t 10 -x 10xv2 -o ../kallisto/BT1293/ \
+	kb count  --h5ad -i ../kallisto/index.idx -g ../kallisto/t2g.txt -t 20 -m 64G -x 10xv2 -o ../kallisto/BT1293/ \
 	--filter bustools --verbose\
 	../data/BT1293_R1.fastq.gz \
 	../data/BT1293_R2.fastq.gz
-
-	#Merging the samples and further analysis in jupyter notebook
